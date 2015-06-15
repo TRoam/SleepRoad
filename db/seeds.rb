@@ -5,3 +5,24 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+puts "Seeding"
+
+User.create(name:"tang",gender:"male")
+User.create(name:"zhang",gender:"female")
+User.create(name:"liu",gender:"male")
+User.create(name:"wang",gender:"male")
+User.create(name:"li",gender:"female")
+
+
+Relationship.create(follower_id:1,followed_id:2)
+Relationship.create(follower_id:2,followed_id:3)
+Relationship.create(follower_id:1,followed_id:3)
+Relationship.create(follower_id:1,followed_id:4)
+Relationship.create(follower_id:3,followed_id:4)
+
+
+
+
+
+
+
