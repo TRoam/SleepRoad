@@ -11,15 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150615133033) do
+ActiveRecord::Schema.define(version: 20150616172810) do
 
   create_table "records", force: true do |t|
     t.integer  "user_id"
     t.datetime "from"
     t.datetime "to"
-    t.datetime "during"
+    t.string   "during"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.time     "sleep"
+    t.time     "weakup"
   end
 
   create_table "relationships", force: true do |t|
