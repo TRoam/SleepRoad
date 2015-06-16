@@ -1,28 +1,65 @@
-== README
+DB
+ActiveRecord::Schema.define(version: 20150616172810) do
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+  create_table "records", force: true do |t|
+    t.integer  "user_id""
+    t.string   "during"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.time     "sleep"
+    t.time     "weakup"
+  end
 
-Things you may want to cover:
+  create_table "relationships", force: true do |t|
+    t.integer  "follower_id"
+    t.integer  "followed_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
-* Ruby version
+  create_table "users", force: true do |t|
+    t.string   "name"
+    t.string   "gender"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
-* System dependencies
+end
+Model 
+class User < ActiveRecord::Base
 
-* Configuration
+	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
+	has_many :followed_users, through: :relationships, source: :followed
+	has_many :reverse_relationships, foreign_key: "followed_id",
+									 class_name: "Relationship",
+									 dependent: :destroy
+	has_many :followers, through: :reverse_relationships,source: :follower
+	has_many :records
+end
 
-* Database creation
+class Relationship < ActiveRecord::Base
+	belongs_to :follower, class_name: "User"
+	belongs_to :followed, class_name: "User"
+	validates :follower_id, presence: true
+	validates :followed_id, presence: true
+end
+class Record < ActiveRecord::Base
+	belongs_to :user
+end
 
-* Database initialization
+Route
 
-* How to run the test suite
+Rails.application.routes.draw do
+  resources :users do
 
-* Services (job queues, cache servers, search engines, etc.)
+    member do 
+      get :punch 
+      get :following
+      get :followers
+      get :recentRecords
+    end
+    resources :relationships , only: [:create, :destroy]
+    resources :records , only: [:index] 
 
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+  end
+end
